@@ -1,0 +1,220 @@
+C:\projects\FPW\NewsPortal>python -m venv venv
+
+C:\projects\FPW\NewsPortal>venv\scripts\activate
+
+(venv) C:\projects\FPW\NewsPortal>pip install django
+
+(venv) C:\projects\FPW\NewsPortal>django-admin startproject NewsPaper
+
+(venv) C:\projects\FPW\NewsPortal>cd NewsPaper
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py startapp news
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py startapp accounts
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py startapp accounts
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py runserver
+
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py makemigrations
+No changes detected
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying sessions.0001_initial... OK
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py makemigrations
+Migrations for 'news':
+  news\migrations\0001_initial.py
+    - Create model Author
+    - Create model Category
+    - Create model Post
+    - Create model PostCategory
+    - Add field postCategory to post
+    - Create model Comment
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, news, sessions
+Running migrations:
+  Applying news.0001_initial... OK
+
+(venv) C:\projects\FPW\NewsPortal\NewsPaper>python manage.py shell
+
+>>> from news.models import *
+>>>
+>>> user1 = User.objects.create_user(username = 'Ivan')
+>>> user1
+<User: Ivan>
+>>> user2 = User.objects.create_user(username = 'Kim')
+>>> user2
+<User: Kim>
+>>> Author.objects.create(authorUser=user1)
+<Author: Author object (1)>
+>>> Author.objects.create(authorUser=user2)
+<Author: Author object (2)>
+>>> Category.objects.create(catName='Automation')
+<Category: Category object (1)>
+>>> Category.objects.create(catName='IT')
+<Category: Category object (2)>
+>>> Category.objects.create(catName='Energy_production')
+<Category: Category object (3)>
+>>> Category.objects.create(catName='Electric_transport')
+<Category: Category object (4)>
+>>> author = Author.objects.get(id=1)
+>>> author
+<Author: Author object (1)>
+>>> Post.objects.create(author=author, categoryType = 'NW', title = 'New controller', text = 'На рынок вышел новый производитель контроллеров для промышлен
+ности. Линейка устройств очень обширная-от головных устройств 3-х видов до модулей расширения с возможностью подключения датчиков сразу нескольких типов.')
+
+<Post: Post object (1)>
+>>> Post.objects.get(id=1).title
+'New controller'
+>>> author = Author.objects.get(id=2)
+>>> author
+<Author: Author object (2)>
+>>> author
+<Author: Author object (2)>
+>>>  Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы не все
+ гладко с безопасностью пользователей при подключении к облаку ')
+  File "<console>", line 1
+    Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы не все
+гладко с безопасностью пользователей при подключении к облаку ')
+    ^
+IndentationError: unexpected indent
+>>> Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы не все
+  File "<console>", line 1
+    Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы не все
+                                                                                                                                                         ^
+SyntaxError: EOL while scanning string literal
+>>>  Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы')
+  File "<console>", line 1
+    Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы')
+    ^
+IndentationError: unexpected indent
+>>> author
+<Author: Author object (2)>
+>>> Post.objects.create(author=author, categoryType = 'AR', title = 'Vulnerability in programm N', text = 'Касаемо бесплатных версий этой программы')
+<Post: Post object (2)>
+>>> Post.objects.create(author=author, categoryType = 'AR', title = 'Coal enegry coming back', text = 'Угольные электростанции выходят на мощности')
+<Post: Post object (3)>
+>>> Post.objects.get(id=1).PostCategory.add(Category.objects.get(id=1))
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Post' object has no attribute 'PostCategory'
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=1).PostCategory.add(Category.objects.get(id=2))
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Post' object has no attribute 'PostCategory'
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=1))
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text='очень интересно')
+<Comment: Comment object (1)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text='как-то сомнительно')
+<Comment: Comment object (2)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=2).authorUser, text='да я вообще всему рад!')
+<Comment: Comment object (3)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=1).authorUser, text='оптимизм это наивно!')
+<Comment: Comment object (4)>
+>>> Post.objects.get(id=1).like()
+>>> Post.objects.get(id=1).like()
+>>>  Post.objects.get(id=2).like()
+  File "<console>", line 1
+    Post.objects.get(id=2).like()
+    ^
+IndentationError: unexpected indent
+>>> Post.objects.get(id=2).like()
+>>> Post.objects.get(id=3).like()
+>>> Comment.objects.get(id=1).rating
+0
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=1).dislike()
+>>> Comment.objects.get(id=2).dislike()
+>>> Author.objects.get(id=1)
+<Author: Author object (1)>
+>>> a = Author.objects.get(id=1)
+>>> a.update_rating()
+>>> a.ratingAuthor
+9
+>>> Author.objects.get(id=2)
+<Author: Author object (2)>
+>>> b = Author.objects.get(id=2)
+>>> b.update_rating()
+>>> b.ratingAuthor
+7
+>>> c = Author.objects.order_by('authorRating')[:1]
+>>> c
+<QuerySet [<Author: Author object (1)>]>
+
+>>> from news.models import *
+>>> a = Author.objects.order_by('-authorRating')[:1]
+>>> for i in a:
+... i.authorUser.username
+  File "<console>", line 2
+    i.authorUser.username
+    ^
+IndentationError: expected an indented block
+>>> for i in a:
+...     i.authorUser.username
+...
+'Ivan'
+
+>>> b = Post.objects.order_by('rating')[0]
+>>> b.author.username
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Author' object has no attribute 'username'
+>>> b.author
+<Author: Author object (2)>
+>>> b.author.authorUser.username
+'Kim'
+>>> b.rating
+1
+>>> b = Post.objects.order_by('-rating')[0]
+>>> b.author.authorUser.username
+'Ivan'
+>>> b.rating
+2
+>>> b.title
+'New controller'
+>>> b.preview
+<bound method Post.preview of <Post: Post object (1)>>
+>>> b.preview
+<bound method Post.preview of <Post: Post object (1)>>
+>>> b.Comment
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Post' object has no attribute 'Comment'
+>>>
+
+
+
